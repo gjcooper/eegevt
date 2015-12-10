@@ -6,7 +6,7 @@ with open('README.md') as rfile:
 setup(name='eegevt',
       version='0.1.0',
       description='Module for working with various EEG event file formats',
-      long_description=long_description
+      long_description=long_description,
       url='https://github.com/gjcooper/eegevt',
       author='Gavin Cooper',
       author_email='gjcooper@gmail.com',,
