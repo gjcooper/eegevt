@@ -66,3 +66,8 @@ class EventFile:
         self._sniff(lines[0])
         self._split(lines)
         self._check()
+
+
+def load(filepath):
+    """Load and return an EventFile object"""
+    return EventFile(filepath)
