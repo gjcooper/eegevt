@@ -68,6 +68,6 @@ class EventFile:
         self._check()
 
 
-def load(filepath):
+def load_efile(filepath):
     """Load and return an EventFile object"""
     return EventFile(filepath)
