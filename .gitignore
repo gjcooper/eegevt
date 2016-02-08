@@ -1,4 +1,5 @@
 venv/
+*.swp
 *.pyc
 eegevt.egg-info/
 dist/
