@@ -34,6 +34,7 @@ class EventFile:
         if self.header != ['Tmu', 'Code', 'TriNo', 'Comnt']:
             raise ValueError('BESA header format not expected')
         self.evttime, self.typecode, self.evtcode, self.codestr = range(4)
+        self.respcode = self.evtcode
         line2 = [d.trim() for d in lines[1].split('\t')]
         if line2[1] == '41':
             self.extra = line2
