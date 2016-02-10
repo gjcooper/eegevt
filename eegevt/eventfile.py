@@ -83,8 +83,10 @@ class EventFile:
         with open(self.root + self.ext, writemode) as ef:
             if self.filetype == 'BESA':
                 ef.write('\t'.join(self.header))
+                ef.write('\n')
                 if self.extra:
                     ef.write('\t'.join(self.extra))
+                    ef.write('\n')
                 ef.write('\n'.join(['\t'.join(d) for d in self.data]))
                 return
             if self.filetype == 'Neuroscan_2':
