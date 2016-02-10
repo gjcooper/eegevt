@@ -13,7 +13,7 @@ class EventFile:
 
     def _sniff(self, firstline):
         """Sniff the file type (creating software)"""
-        if self.ext == '.evt' and firstline.startwith('Tmu'):
+        if self.ext == '.evt' and firstline.startswith('Tmu'):
             self.filetype = 'BESA'
             return
         if self.ext == '.ev2':
