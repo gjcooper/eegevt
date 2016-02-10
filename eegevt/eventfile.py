@@ -30,12 +30,12 @@ class EventFile:
 
     def _splitBESA(self, lines):
         """Split lines in a BESA specific way"""
-        self.header = [h.trim() for h in lines[0].split('\t')]
+        self.header = [h.strip() for h in lines[0].split('\t')]
         if self.header != ['Tmu', 'Code', 'TriNo', 'Comnt']:
             raise ValueError('BESA header format not expected')
         self.evttime, self.typecode, self.evtcode, self.codestr = range(4)
         self.respcode = self.evtcode
-        line2 = [d.trim() for d in lines[1].split('\t')]
+        line2 = [d.strip() for d in lines[1].split('\t')]
         if line2[1] == '41':
             self.extra = line2
             self.timestamp = line2[2]
@@ -43,13 +43,13 @@ class EventFile:
         else:
             self.extra = None
             lines = lines[1:]
-        self.data = [[d.trim() for d in l.split('\t')] for l in lines]
+        self.data = [[d.strip() for d in l.split('\t')] for l in lines]
 
     def _splitNS2(self, lines):
         """split lines in a Neuroscan ev2 specific way"""
         self.evtnum, self.evtcode, self.respcode, self.respaccuracy,
         self.evttime = range(5)
-        self.data = [[d.trim() for d in l.split()] for l in lines]
+        self.data = [[d.strip() for d in l.split()] for l in lines]
 
     def _split(self, lines):
         """Split lines in a fileformat dependant way and extract header"""
