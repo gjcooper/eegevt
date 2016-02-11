@@ -4,7 +4,7 @@ with open('README.md') as rfile:
     long_description = rfile.read()
 
 setup(name='eegevt',
-      version='0.1.6',
+      version='0.1.7',
       description='Module for working with various EEG event file formats',
       long_description=long_description,
       url='https://github.com/gjcooper/eegevt',
