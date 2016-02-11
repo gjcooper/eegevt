@@ -24,9 +24,8 @@ class EventFile:
 
     def _check(self):
         """Test for consistency (all rows have same number of columns """
-        for d in self.data:
-            if len(d) != len(self.header):
-                raise ValueError('Line has unexected number of elements: ', d)
+        if all(len(d) == len(self.data[0]) for d in self.data):
+            raise ValueError('Line has unexected number of elements: ', d)
 
     def _splitBESA(self, lines):
         """Split lines in a BESA specific way"""
