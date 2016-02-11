@@ -47,8 +47,8 @@ class EventFile:
 
     def _splitNS2(self, lines):
         """split lines in a Neuroscan ev2 specific way"""
-        self.evtnum, self.evtcode, self.respcode, self.respaccuracy,
-        self.evttime = range(5)
+        (self.evtnum, self.evtcode, self.respcode, self.respaccuracy,
+         self.evttime) = range(5)
         self.data = [[d.strip() for d in l.split()] for l in lines]
 
     def _split(self, lines):
