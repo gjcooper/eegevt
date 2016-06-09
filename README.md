@@ -11,3 +11,9 @@ Currently can be used for BESA and Neuroscan files
 ## Updates
 
 Now uses namedtuple for the list of events rather than raw str lists with name positions
+
+### BUGFIXES
+
+#### v0.2.1
+
+* TypeError fixed, was not parsing lines correctly

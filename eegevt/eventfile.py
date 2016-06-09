@@ -42,12 +42,12 @@ class EventFile:
         else:
             self.extra = None
             lines = lines[1:]
-        self.events = [Event([d.strip() for d in l.split('\t')]) for l in lines]
+        self.events = [Event(*[d.strip() for d in l.split('\t')]) for l in lines]
 
     def _splitNS2(self, lines):
         """split lines in a Neuroscan ev2 specific way"""
         Event = namedtuple('Event', 'evtnum, code, rcode, racc, rlat, time')
-        self.events = [Event([d.strip() for d in l.split()]) for l in lines]
+        self.events = [Event(*[d.strip() for d in l.split()]) for l in lines]
 
     def _split(self, lines):
         """Split lines in a fileformat dependant way and extract header"""
