@@ -7,3 +7,7 @@ Details
 -------
 
 Currently can be used for BESA and Neuroscan files
+
+## Updates
+
+Now uses namedtuple for the list of events rather than raw str lists with name positions
