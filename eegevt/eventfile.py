@@ -1,4 +1,5 @@
 import os.path
+from collections import namedtuple
 
 
 class EventFile:
@@ -24,7 +25,7 @@ class EventFile:
 
     def _check(self):
         """Test for consistency (all rows have same number of columns """
-        if not all(len(d) == len(self.data[0]) for d in self.data):
+        if not all(len(d) == len(self.events[0]) for d in self.events):
             raise ValueError('Line has unexected number of elements')
 
     def _splitBESA(self, lines):
@@ -32,8 +33,7 @@ class EventFile:
         self.header = [h.strip() for h in lines[0].split('\t')]
         if self.header != ['Tmu', 'Code', 'TriNo', 'Comnt']:
             raise ValueError('BESA header format not expected')
-        self.evttime, self.typecode, self.evtcode, self.codestr = range(4)
-        self.respcode = self.evtcode
+        Event = namedtuple('Event', 'time, typecode, code, codestr')
         line2 = [d.strip() for d in lines[1].split('\t')]
         if line2[1] == '41':
             self.extra = line2
@@ -42,13 +42,12 @@ class EventFile:
         else:
             self.extra = None
             lines = lines[1:]
-        self.data = [[d.strip() for d in l.split('\t')] for l in lines]
+        self.events = [Event([d.strip() for d in l.split('\t')]) for l in lines]
 
     def _splitNS2(self, lines):
         """split lines in a Neuroscan ev2 specific way"""
-        (self.evtnum, self.evtcode, self.respcode, self.respaccuracy,
-         self.evttime) = range(5)
-        self.data = [[d.strip() for d in l.split()] for l in lines]
+        Event = namedtuple('Event', 'evtnum, code, rcode, racc, rlat, time')
+        self.events = [Event([d.strip() for d in l.split()]) for l in lines]
 
     def _split(self, lines):
         """Split lines in a fileformat dependant way and extract header"""
@@ -62,9 +61,9 @@ class EventFile:
 
     def mod_code(self, linenum, newcode):
         '''Modify the stored event code on linenum to be newcode'''
-        self.data[linenum][self.evtcode] = newcode
+        self.events[linenum].code = newcode
         if self.filetype == 'BESA':
-            self.data[linenum][self.codestr] = 'Trig. ' + newcode
+            self.events[linenum].codestr = 'Trig. ' + newcode
 
     def _read(self):
         """Read the text from the event file into memory, sniffing file type
@@ -86,10 +85,10 @@ class EventFile:
                 if self.extra:
                     ef.write('\t'.join(self.extra))
                     ef.write('\n')
-                ef.write('\n'.join(['\t'.join(d) for d in self.data]))
+                ef.write('\n'.join(['\t'.join(d) for d in self.events]))
                 return
             if self.filetype == 'Neuroscan_2':
-                ef.write('\n'.join([' '.join(d) for d in self.data]))
+                ef.write('\n'.join([' '.join(d) for d in self.events]))
                 return
             raise ValueError('Unhandled type', self.filetype)
 
