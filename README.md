@@ -14,6 +14,10 @@ Now uses namedtuple for the list of events rather than raw str lists with name p
 
 ### BUGFIXES
 
+#### v0.2.2
+
+* Code replacement not working due to immutable namedtuple use, use \_replace method for now
+
 #### v0.2.1
 
 * TypeError fixed, was not parsing lines correctly

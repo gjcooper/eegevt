@@ -61,9 +61,10 @@ class EventFile:
 
     def mod_code(self, linenum, newcode):
         '''Modify the stored event code on linenum to be newcode'''
-        self.events[linenum].code = newcode
+        self.events[linenum] = self.events[linenum]._replace(code=newcode)
         if self.filetype == 'BESA':
-            self.events[linenum].codestr = 'Trig. ' + newcode
+            self.events[linenum] = \
+                    self.events[linenum]._replace(codestr='Trig. ' + newcode)
 
     def _read(self):
         """Read the text from the event file into memory, sniffing file type
