@@ -5,12 +5,9 @@ from collections import namedtuple
 class EventFile:
     """docstring for EventFile"""
     def __init__(self, filename):
-        if os.path.isfile(filename):
-            self.source = os.path.abspath(filename)
-            self.root, self.ext = os.path.splitext(filename)
-            self.raw = self._read()
-        else:
-            raise FileNotFoundError('Event file not found', filename)
+        self.source = os.path.abspath(filename)
+        self.root, self.ext = os.path.splitext(filename)
+        self.raw = self._read()
 
     def _sniff(self, firstline):
         """Sniff the file type (creating software)"""
@@ -22,11 +19,6 @@ class EventFile:
             return
         raise ValueError('Undetected type', 'Extension:' + self.ext,
                          'First Line: ' + firstline)
-
-    def _check(self):
-        """Test for consistency (all rows have same number of columns """
-        if not all(len(d) == len(self.events[0]) for d in self.events):
-            raise ValueError('Line has unexected number of elements')
 
     def _splitBESA(self, lines):
         """Split lines in a BESA specific way"""
@@ -74,7 +66,6 @@ class EventFile:
             lines = ef.read().splitlines()
         self._sniff(lines[0])
         self._split(lines)
-        self._check()
 
     def _save(self, writemode='x'):
         """Save the current data to file (build from root/ext) and throw error
