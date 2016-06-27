@@ -1,4 +1,5 @@
 venv/
+.coverage
 *.swp
 *.pyc
 eegevt.egg-info/
