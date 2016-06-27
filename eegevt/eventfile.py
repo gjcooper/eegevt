@@ -1,5 +1,44 @@
 import os.path
-from collections import namedtuple
+
+
+class Event():
+    def __init__(self):
+        self.code = None
+        self.time = None
+        self.order = [self.time, self.code]
+
+    def __getitem__(self, index):
+        """Used for iterating over when writing to file"""
+        return self.order[index]
+
+
+class BESAEvent(Event):
+    '''Event = time, typecode, code, codestr'''
+    def __init__(self, ts, tc, co, cs):
+        """Initialise the event based on the raw line"""
+        super().__init__()
+        self.time = int(ts)
+        self.typecode = tc
+        self.code = int(co)
+        self.order = [self.time, self.typecode, self.code, self.codestr]
+
+    @property
+    def codestr(self):
+        return 'Trig. ' + str(self.code)
+
+
+class NeuroscanEvent(Event):
+    """Event = evtnum, code, rcode, racc, rlat, time"""
+    def __init__(self, en, co, rc, ra, rl, ts):
+        super().__init__()
+        self.evtnum = int(en)
+        self.code = int(co)
+        self.rcode = int(rc)
+        self.racc = int(ra)
+        self.rlat = float(rl)
+        self.time = int(ts)
+        self.order = [self.evtnum, self.code, self.rcode, self.racc, self.rlat,
+                      self.time]
 
 
 class EventFile:
@@ -33,7 +72,6 @@ class EventFile:
         self.header = [h.strip() for h in lines[0].split('\t')]
         if self.header != ['Tmu', 'Code', 'TriNo', 'Comnt']:
             raise ValueError('BESA header format not expected')
-        Event = namedtuple('Event', 'time, typecode, code, codestr')
         line2 = [d.strip() for d in lines[1].split('\t')]
         if line2[1] == '41':
             self.extra = line2
@@ -42,12 +80,13 @@ class EventFile:
         else:
             self.extra = None
             lines = lines[1:]
-        self.events = [Event(*[d.strip() for d in l.split('\t')]) for l in lines]
+        self.events = [BESAEvent(*[d.strip() for d in l.split('\t')])
+                       for l in lines]
 
     def _splitNS2(self, lines):
         """split lines in a Neuroscan ev2 specific way"""
-        Event = namedtuple('Event', 'evtnum, code, rcode, racc, rlat, time')
-        self.events = [Event(*[d.strip() for d in l.split()]) for l in lines]
+        self.events = [NeuroscanEvent(*[d.strip() for d in l.split()])
+                       for l in lines]
 
     def _split(self, lines):
         """Split lines in a fileformat dependant way and extract header"""
@@ -61,10 +100,7 @@ class EventFile:
 
     def mod_code(self, linenum, newcode):
         '''Modify the stored event code on linenum to be newcode'''
-        self.events[linenum] = self.events[linenum]._replace(code=newcode)
-        if self.filetype == 'BESA':
-            self.events[linenum] = \
-                    self.events[linenum]._replace(codestr='Trig. ' + newcode)
+        self.events[linenum].code = newcode
 
     def _read(self):
         """Read the text from the event file into memory, sniffing file type
