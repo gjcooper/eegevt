@@ -51,6 +51,7 @@ class EventFileTestCases(unittest.TestCase):
 
     def test_mod_code(self):
         # v0.2.2 expects str's as codes
+        # v0.3+ should fail but doesn't
         efile = load_efile(self.NSfile)
         efile.mod_code(5, '12')
         self.assertEqual(efile.events[5].code, '12')
