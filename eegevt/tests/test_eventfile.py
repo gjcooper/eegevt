@@ -20,17 +20,17 @@ class EventFileTestCases(unittest.TestCase):
 
     def test_load_BESA_efile(self):
         efile = load_efile(self.BESAfile)
-        self.assertEqual(efile.events[-1].code, '2')
+        self.assertEqual(efile.events[-1].code, 2)
         self.assertEqual(len(efile.events), 33)
 
     def test_load_BESA_noextra(self):
         efile = load_efile(self.resdir + 'BESA_noextra.evt')
-        self.assertEqual(efile.events[-2].time, '5744629')
+        self.assertEqual(efile.events[-2].time, 5744629)
         self.assertEqual(len(efile.events), 4)
 
     def test_load_NS_efile(self):
         efile = load_efile(self.NSfile)
-        self.assertEqual(efile.events[-1].code, '1')
+        self.assertEqual(efile.events[-1].code, 1)
         self.assertEqual(len(efile.events), 35)
 
     def test_nonexistent_file(self):

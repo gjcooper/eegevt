@@ -11,9 +11,15 @@ The BESA file handling assumes a specific order of columns and ignores a start m
 
 ## Updates
 
-Now uses namedtuple for the list of events rather than raw str lists with name positions
+Uses file type specific classes to make interacting with individual events easier. Can now modify codes etc directly rather than using `mod_code` which will is deprecated and will be removed in a future version.
 
 ### BUGFIXES & FEATURES
+
+#### v0.3.0
+
+* New internal representation of individual events
+* Tests updated for new version
+* Event elements that make sense to be represented as ints/floats will be exposed as such. *Note* this may break existing code that expects everything as a string.
 
 #### v0.2.3
 

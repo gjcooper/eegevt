@@ -9,7 +9,9 @@ class Event():
 
     def __getitem__(self, index):
         """Used for iterating over when writing to file"""
-        return self.order[index]
+        if type(self.order[index]) is float:
+            return '{:.4f}'.format(self.order[index])
+        return str(self.order[index])
 
 
 class BESAEvent(Event):
@@ -101,10 +103,10 @@ class EventFile:
         self._split(lines)
         return lines
 
-    def _save(self, writemode='x'):
+    def _save(self, appendtext, writemode='x'):
         """Save the current data to file (build from root/ext) and throw error
         if file exists and overwrite == False"""
-        with open(self.root + self.ext, writemode) as ef:
+        with open(self.root + appendtext + self.ext, writemode) as ef:
             if self.filetype == 'BESA':
                 ef.write('\t'.join(self.header))
                 ef.write('\n')
@@ -125,5 +127,4 @@ def load_efile(filepath):
 
 def save_efile(efile, appendtext='_recoded', **kwargs):
     """save the event file with an optional filename append string"""
-    efile.root += appendtext
-    efile._save(**kwargs)
+    efile._save(appendtext, **kwargs)
