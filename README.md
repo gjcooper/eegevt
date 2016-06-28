@@ -11,9 +11,13 @@ The BESA file handling assumes a specific order of columns and ignores a start m
 
 ## Updates
 
-Uses file type specific classes to make interacting with individual events easier. Can now modify codes etc directly rather than using `mod_code` which will is deprecated and will be removed in a future version.
+Uses file type specific classes to make interacting with individual events easier. Can now modify codes etc directly rather than using `mod_code` which is deprecated and will be removed in a future version.
 
 ### BUGFIXES & FEATURES
+
+#### v0.3.3
+
+* Code changes were not saved as event.order stored only original values, not references
 
 #### v0.3.2
 

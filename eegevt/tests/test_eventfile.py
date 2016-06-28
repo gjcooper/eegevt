@@ -12,11 +12,12 @@ class EventFileTestCases(unittest.TestCase):
         self.NSfile = self.resdir + 'NS2.ev2'
 
     def tearDown(self):
-        try:
-            os.remove(self.resdir + 'NS2_minimal_recoded.ev2')
-            os.remove(self.resdir + 'BESA_minimal_recoded.evt')
-        except OSError:
-            pass
+        for outfile in ['NS2_minimal_recoded.ev2', 'BESA_minimal_recoded.evt',
+                        'NS2_recoded.ev2']:
+            try:
+                os.remove(self.resdir + outfile)
+            except OSError:
+                pass
 
     def test_load_BESA_efile(self):
         efile = load_efile(self.BESAfile)
@@ -53,11 +54,13 @@ class EventFileTestCases(unittest.TestCase):
         # v0.2.2 expects str's as codes
         # v0.3+ should fail but doesn't
         efile = load_efile(self.NSfile)
-        efile.mod_code(5, '12')
-        self.assertEqual(efile.events[5].code, '12')
+        efile.mod_code(5, 12)
+        self.assertEqual(efile.events[5].code, 12)
         efile = load_efile(self.BESAfile)
-        efile.mod_code(5, '12')
-        self.assertEqual(efile.events[5].code, '12')
+        efile.mod_code(5, 12)
+        self.assertEqual(efile.events[5].code, 12)
+        efile.events[4].code = 3
+        self.assertEqual(efile.events[4].code, 3)
 
     def test_save_Neuroscan(self):
         fp = self.resdir + 'NS2_minimal.ev2'
@@ -78,3 +81,10 @@ class EventFileTestCases(unittest.TestCase):
         raw1 = [list(filter(bool, re.split(pattern, l))) for l in efile.raw]
         raw2 = [list(filter(bool, re.split(pattern, l))) for l in efile2.raw]
         self.assertEqual(raw1, raw2)
+
+    def test_mod_and_save(self):
+        efile = load_efile(self.NSfile)
+        efile.events[4].code = 247
+        save_efile(efile)
+        ef2 = load_efile(self.resdir + 'NS2_recoded.ev2')
+        self.assertEqual(ef2.events[4].code, 247)

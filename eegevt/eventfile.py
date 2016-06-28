@@ -5,13 +5,14 @@ class Event():
     def __init__(self):
         self.code = None
         self.time = None
-        self.order = [self.time, self.code]
+        self.order = ['time', 'code']
 
     def __getitem__(self, index):
         """Used for iterating over when writing to file"""
-        if type(self.order[index]) is float:
-            return '{:.4f}'.format(self.order[index])
-        return str(self.order[index])
+        attval = getattr(self, self.order[index])
+        if type(attval) is float:
+            return '{:.4f}'.format(attval)
+        return str(attval)
 
 
 class BESAEvent(Event):
@@ -25,7 +26,7 @@ class BESAEvent(Event):
             self.time = float(ts)
         self.typecode = tc
         self.code = int(co)
-        self.order = [self.time, self.typecode, self.code, self.codestr]
+        self.order = 'time,typecode,code,codestr'.split(',')
 
     @property
     def codestr(self):
@@ -45,8 +46,7 @@ class NeuroscanEvent(Event):
             self.time = int(ts)
         except ValueError:
             self.time = float(ts)
-        self.order = [self.evtnum, self.code, self.rcode, self.racc, self.rlat,
-                      self.time]
+        self.order = 'evtnum,code,rcode,racc,rlat,time'.split(',')
 
 
 class EventFile:
