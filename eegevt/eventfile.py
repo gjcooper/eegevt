@@ -41,7 +41,10 @@ class NeuroscanEvent(Event):
         self.rcode = int(rc)
         self.racc = int(ra)
         self.rlat = float(rl)
-        self.time = int(ts)
+        try:
+            self.time = int(ts)
+        except ValueError:
+            self.time = float(ts)
         self.order = [self.evtnum, self.code, self.rcode, self.racc, self.rlat,
                       self.time]
 

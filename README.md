@@ -15,6 +15,10 @@ Uses file type specific classes to make interacting with individual events easie
 
 ### BUGFIXES & FEATURES
 
+#### v0.3.2
+
+* Last update actually implemented float/int handling for BESA, this time we implement it for Neuroscan
+
 #### v0.3.1
 
 * Neuroscan time format can be int(millisecond) or float(second), try both
