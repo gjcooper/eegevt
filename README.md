@@ -15,6 +15,10 @@ Uses file type specific classes to make interacting with individual events easie
 
 ### BUGFIXES & FEATURES
 
+#### v0.3.1
+
+* Neuroscan time format can be int(millisecond) or float(second), try both
+
 #### v0.3.0
 
 * New internal representation of individual events

@@ -19,7 +19,10 @@ class BESAEvent(Event):
     def __init__(self, ts, tc, co, cs):
         """Initialise the event based on the raw line"""
         super().__init__()
-        self.time = int(ts)
+        try:
+            self.time = int(ts)
+        except ValueError:
+            self.time = float(ts)
         self.typecode = tc
         self.code = int(co)
         self.order = [self.time, self.typecode, self.code, self.codestr]
