@@ -47,9 +47,6 @@ class EventFile:
             self._splitBESA(lines)
         elif self.filetype == 'Neuroscan_2':
             self._splitNS2(lines)
-        else:
-            raise NotImplementedError('Cannot find split method for ',
-                                      self.filetype)
 
     def mod_code(self, linenum, newcode):
         '''Modify the stored event code on linenum to be newcode'''
@@ -66,6 +63,7 @@ class EventFile:
             lines = ef.read().splitlines()
         self._sniff(lines[0])
         self._split(lines)
+        return lines
 
     def _save(self, writemode='x'):
         """Save the current data to file (build from root/ext) and throw error
@@ -77,12 +75,11 @@ class EventFile:
                 if self.extra:
                     ef.write('\t'.join(self.extra))
                     ef.write('\n')
-                ef.write('\n'.join(['\t'.join(d) for d in self.events]))
+                ef.write('\n'.join(['\t'.join(d) for d in self.events]) + '\n')
                 return
             if self.filetype == 'Neuroscan_2':
-                ef.write('\n'.join([' '.join(d) for d in self.events]))
+                ef.write('\n'.join([' '.join(d) for d in self.events]) + '\n')
                 return
-            raise ValueError('Unhandled type', self.filetype)
 
 
 def load_efile(filepath):
