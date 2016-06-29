@@ -2,7 +2,7 @@ import unittest
 import filecmp
 import re
 import os
-from eegevt.eventfile import EventFile, load_efile, save_efile
+from eegevt.eventfile import load_efile, save_efile
 
 
 class EventFileTestCases(unittest.TestCase):
@@ -13,7 +13,8 @@ class EventFileTestCases(unittest.TestCase):
 
     def tearDown(self):
         for outfile in ['NS2_minimal_recoded.ev2', 'BESA_minimal_recoded.evt',
-                        'NS2_recoded.ev2']:
+#                        'NS2_recoded.ev2']:
+                        'NS2_recoded.ev2', 'NS2_withheader_recoded.ev2']:
             try:
                 os.remove(self.resdir + outfile)
             except OSError:
@@ -73,6 +74,18 @@ class EventFileTestCases(unittest.TestCase):
         efile = load_efile(fp)
         save_efile(efile)
         self.assertTrue(filecmp.cmp(fp, fp2, shallow=False))
+
+    def test_save_NS_efile_with_header(self):
+        fp = self.resdir + 'NS2_withheader.ev2'
+        fp2 = fp.replace('.ev2', '_recoded.ev2')
+        efile = load_efile(fp)
+        save_efile(efile)
+        efile2 = load_efile(fp2)
+        pattern = '[\s]+'
+        self.assertEqual(len(efile.raw), len(efile2.raw))
+        raw1 = [list(filter(bool, re.split(pattern, l))) for l in efile.raw]
+        raw2 = [list(filter(bool, re.split(pattern, l))) for l in efile2.raw]
+        self.assertEqual(raw1, raw2)
 
     def test_save_BESA(self):
         # BESA evt files seem to have spurious whitespace

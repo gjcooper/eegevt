@@ -15,6 +15,10 @@ Uses file type specific classes to make interacting with individual events easie
 
 ### BUGFIXES & FEATURES
 
+#### v0.3.5
+
+* Neuroscan events with floats now output time columns with same precision that was read
+
 #### v0.3.4
 
 * Fix bug where header in Neuroscan2 file caused crash

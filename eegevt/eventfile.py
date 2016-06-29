@@ -5,12 +5,16 @@ class Event():
     def __init__(self):
         self.code = None
         self.time = None
+        self.precision = None
         self.order = ['time', 'code']
 
     def __getitem__(self, index):
         """Used for iterating over when writing to file"""
         attval = getattr(self, self.order[index])
         if type(attval) is float:
+            if self.order[index] == 'time':
+                if self.precision:
+                    return '{0:.{1}f}'.format(attval, self.precision)
             return '{:.4f}'.format(attval)
         return str(attval)
 
@@ -45,6 +49,7 @@ class NeuroscanEvent(Event):
         try:
             self.time = int(ts)
         except ValueError:
+            self.precision = len(ts.split('.')[1])
             self.time = float(ts)
         self.order = 'evtnum,code,rcode,racc,rlat,time'.split(',')
 
@@ -128,7 +133,7 @@ class EventFile:
                 return
             if self.filetype == 'Neuroscan_2':
                 if self.header:
-                    ef.write([' '.join(d) for d in self.header] + '\n')
+                    ef.write('\t'.join(self.header) + '\n')
                 ef.write('\n'.join([' '.join(d) for d in self.events]) + '\n')
                 return
 
