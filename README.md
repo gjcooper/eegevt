@@ -15,6 +15,10 @@ Uses file type specific classes to make interacting with individual events easie
 
 ### BUGFIXES & FEATURES
 
+#### v0.3.4
+
+* Fix bug where header in Neuroscan2 file caused crash
+
 #### v0.3.3
 
 * Code changes were not saved as event.order stored only original values, not references

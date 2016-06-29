@@ -34,6 +34,11 @@ class EventFileTestCases(unittest.TestCase):
         self.assertEqual(efile.events[-1].code, 1)
         self.assertEqual(len(efile.events), 35)
 
+    def test_load_NS_efile_with_header(self):
+        efile = load_efile(self.resdir + 'NS2_withheader.ev2')
+        self.assertEqual(efile.events[-1].code, 1)
+        self.assertEqual(len(efile.events), 7)
+
     def test_nonexistent_file(self):
         with self.assertRaises(FileNotFoundError):
             load_efile(self.resdir + 'NotAFile.evt')

@@ -85,6 +85,11 @@ class EventFile:
 
     def _splitNS2(self, lines):
         """split lines in a Neuroscan ev2 specific way"""
+        if 'Offset' in lines[0]:
+            self.header = [h.strip() for h in lines[0].split()]
+            lines = lines[1:]
+        else:
+            self.header = None
         self.events = [NeuroscanEvent(*[d.strip() for d in l.split()])
                        for l in lines]
 
@@ -122,6 +127,8 @@ class EventFile:
                 ef.write('\n'.join(['\t'.join(d) for d in self.events]) + '\n')
                 return
             if self.filetype == 'Neuroscan_2':
+                if self.header:
+                    ef.write([' '.join(d) for d in self.header] + '\n')
                 ef.write('\n'.join([' '.join(d) for d in self.events]) + '\n')
                 return
 
